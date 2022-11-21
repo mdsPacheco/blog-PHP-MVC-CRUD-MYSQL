@@ -2,7 +2,17 @@
 
     class Postagem {
         public static function selecionaTodos(){
-            $con = new PDO('mysql: host=localhost; dbname = blog-php-mvc-crud-mysql;', "root",'');
-            var_dump($con);
+            $con = Connection::getConn();
+            $sql = 'SELECT * FROM postagem ORDER BY id DESC';
+            $sql = $con->prepare($sql);
+            $sql->execute();
+            $resultado = array();
+            while($row = $sql->fetchObject('Postagem')) {
+                $resultado[] = $row;
+            }
+            if(!$resultado){
+                throw new Exception('Não foi encontrado nenhum registro.');
+            }
+            return $resultado;
         }
     }
